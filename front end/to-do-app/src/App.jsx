@@ -1,11 +1,14 @@
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./Layout.jsx";
 
 function App() {
 
   return (
-    <>
-      <h1 className="text-4xl font-bold bg-amber-300 text-black">Hello Tailwind v4!</h1>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout/>} />
+      </Routes>
+    </Router>
   )
 }
 
