@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
 :root{
-    background-color: #111111;
+    background-color: #090909;
+    font-family: 'inter';
 }
