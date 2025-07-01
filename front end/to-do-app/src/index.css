@@ -4,3 +4,7 @@
     background-color: #090909;
     font-family: 'inter';
 }
+
+html, body {
+    overflow: hidden;
+}

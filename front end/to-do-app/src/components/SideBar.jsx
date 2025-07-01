@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { NavLink } from "react-router";
 
 const SideBarLink = ({link,title}) => {
     return (
         <>
-            <NavLink className={({isActive})=>`w-[90%] h-[80px] mx-auto rounded-[20px] text-white text-[60px] ${isActive ? "bg-[#090909]" : "bg-[#111111]"}`} to={link}>
+            <NavLink className={({isActive})=>`flex items-center px-[15px] w-full h-[60px] rounded-[20px] text-[30px] ${isActive ? "bg-[#090909] text-[#888888]" : "bg-[#111111] text-[#AAAAAA]"}`} to={link}>
                 {title}
             </NavLink>
         </>
@@ -13,16 +13,21 @@ const SideBarLink = ({link,title}) => {
 
 const SideBar = () => {
     const [menuExtended,setMenuExtended] = useState(false);
-    const navLinksList = [{link : "/notes", title : "notes"}]
+    const [showList,setShowList] = useState(false);
+    const navLinksList = [{link : "/", title : "notes"},{link : "/daily-tasks", title : "daily tasks"}]
 
     return(
-        <div onMouseLeave={()=>{if(menuExtended){setMenuExtended(false)}}} onClick={()=>{if(!menuExtended){setMenuExtended(true)}}} className={`${menuExtended ? "w-[550px]":"w-[50px]"} h-screen transition-[width] duration-500 flex flex-row`}>   
+        <div 
+        onMouseLeave={()=>{if(menuExtended){setMenuExtended(false);setShowList(false)}}} 
+        onClick={()=>{if(!menuExtended){setMenuExtended(true);setTimeout(()=>{setShowList(true)},300)}}} 
+        className={`${menuExtended ? "w-[350px]":"w-[50px]"} h-screen transition-[width] duration-500 flex flex-row`}
+        >   
             <div className="grow bg-[#111111]">
+                <div className={`${showList ? "" : "hidden"} w-full p-[5%]`}>
                 {navLinksList.map((item, index)=>{return(
-                    <div className={`${menuExtended ? "" : "hidden"}`}>
                         <SideBarLink key={index} link={item.link} title={item.title}/>
-                    </div>
                 )})}
+                </div>
             </div>
             <div className="w-[50px] h-full group">
                 <div className={`bg-gradient-to-r from-[#111111] to-[#090909] w-0 h-full ${menuExtended ? "" : "group-hover:w-[50px] cursor-pointer"} transition-[width] duration-300`}></div>
