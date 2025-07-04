@@ -14,13 +14,13 @@ const SideBarLink = ({link,title}) => {
 const SideBar = () => {
     const [menuExtended,setMenuExtended] = useState(false);
     const [showList,setShowList] = useState(false);
-    const navLinksList = [{link : "/", title : "notes"},{link : "/daily-tasks", title : "daily tasks"}]
+    const navLinksList = [{link : "/notes", title : "notes"},{link : "/daily-tasks", title : "daily tasks"}]
 
     return(
         <div 
         onMouseLeave={()=>{if(menuExtended){setMenuExtended(false);setShowList(false)}}} 
         onClick={()=>{if(!menuExtended){setMenuExtended(true);setTimeout(()=>{setShowList(true)},300)}}} 
-        className={`${menuExtended ? "w-[350px]":"w-[50px]"} h-screen transition-[width] duration-500 flex flex-row`}
+        className={`${menuExtended ? "w-[350px]":"w-[50px]"} h-screen transition-[width] duration-500 flex flex-row shrink-0`}
         >   
             <div className="grow bg-[#111111]">
                 <div className={`${showList ? "" : "hidden"} w-full p-[5%]`}>
