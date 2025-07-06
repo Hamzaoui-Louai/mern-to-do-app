@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element={<Navigate to="/notes"/>}/>
         <Route element={<Layout/>}>
           <Route path="/notes" element={<Notes/>}/>
-          <Route path="/notes/:title" element={<NoteEditor/>}/>
+          <Route path="/notes/:initialTitle" element={<NoteEditor/>}/>
         </Route>
         <Route path="*" element={<Page404/>}/>
       </Routes>

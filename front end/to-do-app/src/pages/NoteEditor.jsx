@@ -16,16 +16,20 @@ const findNoteContentByTitle = (title) => {
 }
 
 const NoteEditor = () => {
-    const {title} = useParams();
-    const initialContent = findNoteContentByTitle(title)    
+    const {initialTitle} = useParams();
+    const [title,setTitle] = useState(initialTitle)
+    const initialContent = findNoteContentByTitle(title)        
     const [content,setContent] = useState(initialContent)
 
     return(
         <div className="h-screen bg-[#111111]">
             <div className="h-[100px] flex flex-row justify-between items-center">
-                <h1 className="text-[#888888] text-[70px] ml-[45px]">
-                    {title}
-                </h1>
+                <input 
+                    onChange={(e)=>{setTitle(e.target.value)}}
+                    className="text-[#888888] text-[70px] ml-[45px] grow border-none bg-transparent outline-none focus:outline-none"
+                    value={title} 
+                    type="text"
+                />
                 <button 
                 className="bg-[#888888] hover:bg-[#44CC44] hover:text-white transition-colors duration-100 rounded-[15px] h-[50px] w-[200px] text-[#111111] text-[20px] flex flex-row items-center justify-evenly mr-[50px] cursor-pointer">
                     Save your note
