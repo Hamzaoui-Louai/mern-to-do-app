@@ -2,19 +2,13 @@ import { FaPlus } from "react-icons/fa6";
 import { FaPen } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 import { useNavigate } from "react-router";
-import useNotesStore from "../stores/notesStore";
 
-/*const dummyNotes = 
+const dummyNotes = 
     [{title:"note1",content:"this is the first note in this to do list application that soon will be a personal assistant , again this is the first note in this to do list application that soon will be a personal assistant , again this is the first note in this to do list application that soon will be a personal assistant"}
     ,{title:"note2",content:"this is just another note"}
     ,{title:"note3",content:"this is just another note"}
     ,{title:"note4",content:"this is just another note"}
-    ,{title:"note5",content:"this is just another note"}]*/
-
-const getNotes = () => {
-    const notes = useNotesStore((state)=>state.notes)
-    return notes
-}
+    ,{title:"note5",content:"this is just another note"}]
 
 const Note = ({title,content}) =>{
     const Navigate = useNavigate();
@@ -42,7 +36,6 @@ const Note = ({title,content}) =>{
 }
 
 const Notes = () =>{
-    const notes = getNotes();
 
     return (
         <div className="h-screen bg-[#111111]">
@@ -57,7 +50,7 @@ const Notes = () =>{
                 </button>
             </div>
             <list>
-                {notes.map((note, index) => {
+                {dummyNotes.map((note, index) => {
                     return(
                         <ul className="mx-[50px]" key={index}>
                             <hr className="border-[#888888] mx-auto border-2 w-full"/>
