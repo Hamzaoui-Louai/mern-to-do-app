@@ -3,8 +3,8 @@ import notes from "../models/notes.js"
 const CreateNote = async (req,res)=>{
     try
     {
-    const {content} = req.body
-        const newNote = new notes({ content });
+    const {title,content} = req.body
+        const newNote = new notes({ title, content });
         await newNote.save();
         res.status(201).json(newNote);
         console.log(`added the note ${content}`)
@@ -40,11 +40,28 @@ const UpdateNote = async (req,res)=>{
 
 const ReadNote = async (req,res) =>{
     try {
-        const todos = await notes.find();
-        res.json(todos);
+        const title = req.params.title
+        console.log(title)
+        const note = await notes.findOne({title:title},{ content : 1 , _id : 0});        
+        note ? 
+        res.json(note) :
+        res.status(404).json({ message: "No note found." });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 }
 
-export {CreateNote , UpdateNote , ReadNote}
+const ReadAllNotes = async (req,res) => {
+    try {
+        const notesList = await notes.find({},{ title : 1, content : 1 , _id : 0});        
+        notesList ? 
+        res.json(notesList) :
+        res.status(404).json({ message: "No notes found." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+
+
+export {CreateNote , UpdateNote , ReadNote , ReadAllNotes }

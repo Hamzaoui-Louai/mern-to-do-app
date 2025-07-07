@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors"
 
 import notesRoutes from "./routes/notesRoutes.js"
 
@@ -12,6 +13,8 @@ const PORT = 3000;
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('✅ Connected to MongoDB Atlas'))
 .catch(err => console.error('❌ MongoDB connection error:', err));
+
+app.use(cors())
 
 app.use(express.json())
 
