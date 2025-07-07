@@ -1,12 +1,41 @@
 import { useParams } from "react-router"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSave } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { getRequest , postRequest , putRequest } from "../api/axiosRequests";
+import { useQuery , useMutation } from "@tanstack/react-query";
 
 const NoteEditor = () => {
+
     const {initialTitle} = useParams();
-    const [title,setTitle] = useState(initialTitle)       
-    const [content,setContent] = useState("initialContent")
+    const [title,setTitle] = useState(initialTitle)    
+    
+    const [content,setContent] = useState("loading the note for the goat")
+    
+    const { data : initialContent , error , isLoading , isError } = useQuery({
+        queryKey: ["notes" , initialTitle],
+        queryFn: () => getRequest(`/api/notes/${initialTitle}`)
+    })
+
+    useEffect(()=>{
+        if(isLoading)
+        {
+            setContent("loading the note for the goat")
+            return;
+        }
+        if(isError)
+        {
+            setContent("")
+            toast.error(error.message)
+            return;
+        }
+        if(initialContent)
+        {
+            console.log(initialContent)
+            setContent(initialContent?.data?.content)
+        }
+    },[isLoading,initialContent,isError])
+    
 
     return(
         <div className="h-screen bg-[#111111]">
