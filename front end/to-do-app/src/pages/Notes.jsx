@@ -2,13 +2,11 @@ import { FaPlus } from "react-icons/fa6";
 import { FaPen } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getRequest } from "../api/axiosRequests";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const dummyNotes = 
-    [{title:"note1",content:"this is the first note in this to do list application that soon will be a personal assistant , again this is the first note in this to do list application that soon will be a personal assistant , again this is the first note in this to do list application that soon will be a personal assistant"}
-    ,{title:"note2",content:"this is just another note"}
-    ,{title:"note3",content:"this is just another note"}
-    ,{title:"note4",content:"this is just another note"}
-    ,{title:"note5",content:"this is just another note"}]
 
 const Note = ({title,content}) =>{
     const Navigate = useNavigate();
@@ -36,6 +34,24 @@ const Note = ({title,content}) =>{
 }
 
 const Notes = () =>{
+    const {data : notesList , error , isLoading , isError} = useQuery({
+        queryKey : ['notesList'],
+        queryFn : () => getRequest("/api/notes")
+    })
+
+    const [notes,setNotes] = useState([])
+
+    useEffect(()=>{
+            if(isError)
+            {
+                toast.error(error?.message)
+                return;
+            }
+            if(notesList)
+            {
+                setNotes(notesList.data)
+            }
+    },[notesList,isLoading,isError])
 
     return (
         <div className="h-screen bg-[#111111]">
@@ -50,7 +66,16 @@ const Notes = () =>{
                 </button>
             </div>
             <list>
-                {dummyNotes.map((note, index) => {
+                {
+                (isLoading) ?
+                <h1 className="text-[#888888] text-[20px] ml-[50px]">
+                    loading the notes
+                </h1>
+                :
+                (isError) ? 
+                ""
+                :
+                notes?.map((note, index) => {
                     return(
                         <ul className="mx-[50px]" key={index}>
                             <hr className="border-[#888888] mx-auto border-2 w-full"/>
