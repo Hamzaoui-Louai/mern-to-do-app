@@ -74,6 +74,17 @@ const ReadAllNotes = async (req,res) => {
     }
 }
 
+const DeleteNote = async (req,res) => {
+    try {
+        const title = req.params.title
+        if (await notes.findOne({title:title}))
+        {
+            await notes.deleteOne({title:title})
+        }
+        res.status(204)
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
 
-
-export {CreateNote , UpdateNote , ReadNote , ReadAllNotes }
+export {CreateNote , UpdateNote , ReadNote , ReadAllNotes , DeleteNote}
