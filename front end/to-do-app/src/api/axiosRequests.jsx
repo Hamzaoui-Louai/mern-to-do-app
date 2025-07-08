@@ -29,7 +29,7 @@ export async function patchRequest(url,body)
     return data;
 }
 
-export async function deleteRequest(url,body)
+export async function deleteRequest(url,body={})
 {
     const data = await api.delete(url,body)
     return data;
