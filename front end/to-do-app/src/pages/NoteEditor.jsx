@@ -1,11 +1,14 @@
 import { useParams } from "react-router"
 import { useEffect, useState } from "react";
 import { FaSave } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { getRequest , postRequest , putRequest } from "../api/axiosRequests";
 import { useQuery , useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 
 const NoteEditor = () => {
+    const Navigate = useNavigate()
 
     const {initialTitle} = useParams();
     const [title,setTitle] = useState(initialTitle)    
@@ -14,8 +17,55 @@ const NoteEditor = () => {
     
     const { data : initialContent , error , isLoading , isError } = useQuery({
         queryKey: ["notes" , initialTitle],
-        queryFn: () => getRequest(`/api/notes/${initialTitle}`)
+        queryFn: () => getRequest(`/api/notes/${initialTitle}`),
+        enabled : initialTitle != "new_note",
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,    
     })
+
+    const newNote = useMutation({
+        mutationFn : ()=>{ return postRequest("/api/notes",{title:title,content:content})},
+        onSuccess :()=>{
+            toast.success("your note has been created")
+            //Navigate(`/notes/${title}`)
+        },
+        onError :(error)=>{
+            toast.error(error?.message)
+        },
+
+        })
+    
+    const editNote = useMutation({
+            mutationFn : ()=>{ return putRequest(`/api/notes/${initialTitle}`,{title:title,content:content})},
+            onSuccess :()=>{
+                toast.success("your progress has been saved")
+            },
+            onError :(error)=>{
+                toast.error(error?.message)
+            }
+            })
+
+    const handleSave = () => {
+        if(title === "")
+        {
+            toast.error("dude the note has no title")
+        }
+        else if(content === "")
+        {
+            toast.error("the note is still empty buddy ¯\\_(ツ)_/¯")
+        }
+        else
+        {
+            if(initialTitle === "new_note")
+            {
+                newNote.mutate()
+            }
+            else
+            {
+                editNote.mutate()
+            }
+        }
+    } 
 
     useEffect(()=>{
         if(isLoading)
@@ -36,6 +86,14 @@ const NoteEditor = () => {
         }
     },[isLoading,initialContent,isError])
     
+    useEffect(()=>{
+        if(initialTitle === "new_note")
+        {
+            setTitle("");
+            setContent("");
+        }
+    },[initialTitle])
+
 
     return(
         <div className="h-screen bg-[#111111]">
@@ -47,11 +105,24 @@ const NoteEditor = () => {
                     type="text"
                 />
                 <button 
-                className="bg-[#888888] hover:bg-[#44CC44] hover:text-white transition-colors duration-100 rounded-[15px] h-[50px] w-[200px] text-[#111111] text-[20px] flex flex-row items-center justify-evenly mr-[50px] cursor-pointer"
-                onClick={()=>{saveNote()}}
+                className={`${(editNote.isPending || newNote.isPending) ? "bg-[#22AA22] text-[#AAAAAA] cursor-wait":"bg-[#888888] text-[#111111] hover:bg-[#44CC44] hover:text-white transition-colors duration-100 cursor-pointer"} rounded-[15px] h-[50px] w-[200px] text-[20px] flex flex-row items-center justify-evenly mr-[50px]`}
+                onClick={()=>{handleSave()}}
                 >
-                    Save your note
-                    <FaSave />
+                    {
+                    (editNote.isPending || newNote.isPending) ?
+                    "loading"
+                    :
+                    (initialTitle == "new_note")?
+                        <>
+                            Add a new note
+                            <FaPlus />
+                        </>
+                        :
+                        <>
+                            Save your note
+                            <FaSave />
+                        </>
+                        }
                 </button>
             </div>
             <hr className="border-[#888888] border-2 w-[calc(100%-100px)] mx-auto" />

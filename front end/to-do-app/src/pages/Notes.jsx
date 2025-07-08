@@ -34,6 +34,8 @@ const Note = ({title,content}) =>{
 }
 
 const Notes = () =>{
+    const Navigate = useNavigate();
+
     const {data : notesList , error , isLoading , isError} = useQuery({
         queryKey : ['notesList'],
         queryFn : () => getRequest("/api/notes")
@@ -60,7 +62,9 @@ const Notes = () =>{
                     Notes
                 </h1>
                 <button 
-                className="bg-[#888888] hover:bg-[#444444] hover:text-white transition-colors duration-100 rounded-[15px] h-[50px] w-[200px] text-[#111111] text-[20px] flex flex-row items-center justify-evenly mr-[50px] cursor-pointer">
+                className="bg-[#888888] hover:bg-[#444444] hover:text-white transition-colors duration-100 rounded-[15px] h-[50px] w-[200px] text-[#111111] text-[20px] flex flex-row items-center justify-evenly mr-[50px] cursor-pointer"
+                onClick={()=>Navigate("/notes/new_note")}
+                >
                     Add a new note
                     <FaPlus />
                 </button>

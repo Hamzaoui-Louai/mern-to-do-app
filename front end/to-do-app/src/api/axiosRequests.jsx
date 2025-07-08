@@ -13,6 +13,7 @@ export async function getRequest(url)
 
 export async function postRequest(url,body)
 {
+    await new Promise(res => setTimeout(res, 2000));
     const data = await api.post(url,body)
     return data;
 }
