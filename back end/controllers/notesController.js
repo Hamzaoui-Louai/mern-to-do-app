@@ -4,10 +4,18 @@ const CreateNote = async (req,res)=>{
     try
     {
     const {title,content} = req.body
+    console.log(title)
+        if(await notes.findOne({title:title}))
+        {
+            res.status(409).json({ message: "a note with the same title already exists"})
+        }
+        else
+        {
         const newNote = new notes({ title, content });
         await newNote.save();
         res.status(201).json(newNote);
         console.log(`added the note ${content}`)
+        }
     }
     catch (err) {
         res.status(500).json({ message: err.message });
@@ -16,14 +24,18 @@ const CreateNote = async (req,res)=>{
 
 const UpdateNote = async (req,res)=>{
     try {
-        const { content } = req.body;
+        const initialTitle = req.params.initialTitle
+        const { title, content } = req.body;
+        if (!title) {
+            return res.status(400).json({ message: "Title is required." });
+        }
         if (!content) {
             return res.status(400).json({ message: "Content is required." });
         }
     
         const updatedNote = await notes.findOneAndUpdate(
-            {},                
-            { content },     
+            { title : initialTitle},                
+            { title : title ,content : content },     
             { new: true }       
         );
     
@@ -31,7 +43,7 @@ const UpdateNote = async (req,res)=>{
             return res.status(404).json({ message: "No note found." });
         }
     
-        res.json(updatedNote);
+        res.status(200).json(updatedNote);
     
         } catch (err) {
         res.status(500).json({ error: err.message });
