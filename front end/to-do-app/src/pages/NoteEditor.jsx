@@ -27,7 +27,7 @@ const NoteEditor = () => {
         mutationFn : ()=>{ return postRequest("/api/notes",{title:title,content:content})},
         onSuccess :()=>{
             toast.success("your note has been created")
-            //Navigate(`/notes/${title}`)
+            Navigate(`/notes/${title}`)
         },
         onError :(error)=>{
             toast.error(error?.message)
