@@ -14,7 +14,7 @@ const SideBarLink = ({link,title}) => {
 const SideBar = () => {
     const [menuExtended,setMenuExtended] = useState(false);
     const [showList,setShowList] = useState(false);
-    const navLinksList = [{link : "/notes", title : "notes"},{link : "/daily-tasks", title : "daily tasks"}]
+    const navLinksList = [{link : "/notes", title : "notes"},{link : "/short-term-goals", title : "short term goals"}]
 
     return(
         <div 

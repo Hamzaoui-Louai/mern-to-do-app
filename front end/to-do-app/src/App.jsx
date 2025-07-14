@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Navigate, Routes, Route } from "react-router-d
 import Layout from "./Layout.jsx";
 import Notes from "./pages/Notes.jsx"
 import NoteEditor from "./pages/NoteEditor.jsx";
+import ShortTermGoals from "./pages/ShortTermGoals.jsx";
 import Page404 from "./pages/Page404.jsx"
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -20,6 +21,7 @@ function App() {
             <Route element={<Layout/>}>
               <Route path="/notes" element={<Notes/>}/>
               <Route path="/notes/:initialTitle" element={<NoteEditor/>}/>
+              <Route path="/short-term-goals" element={<ShortTermGoals/>}/>
             </Route>
             <Route path="*" element={<Page404/>}/>
           </Routes>
